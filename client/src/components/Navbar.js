@@ -6,14 +6,15 @@ import { NavLink, } from 'react-router-dom'
 class Navbar extends React.Component {
 
 	rightNavItems = () => {
-		const { auth: { user, handleLogout, } } = this.props;
+		const { auth: { user, handleLogout, }, history } = this.props;
+		// debugger
 		if (user) {
 			return(
 				<Menu.Menu position='right'>
 					<Menu.Item>
 						{ user.email }
 					</Menu.Item>
-					<Menu.Item onClick={() => handleLogout}>
+					<Menu.Item onClick={() => handleLogout( history )}>
 						Logout
 					</Menu.Item>
 				</Menu.Menu>

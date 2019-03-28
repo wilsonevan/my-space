@@ -5,7 +5,15 @@ import { Header, Form, Button, Segment, } from 'semantic-ui-react';
 
 
 class Register extends React.Component {
-	state = { email: '', password: '', passwordConfirmation: '', name: '', nickname: '', }
+	state = { email: '', password: '', passwordConfirmation: '', name: '', nickname: '', id: null, }
+
+	componentDidMount() {
+		const { auth: { user, }} = this.props;
+		// debugger
+		if (user){
+			this.setState({email: user.email, name: user.name, nickname: user.nickname, id: user.id, password: user.password, passwordConfirmation: '' })
+		}
+	}
 
 	handleChange = (e, {name, value, }) => {
 		this.setState({ [name]: value, });
@@ -14,10 +22,16 @@ class Register extends React.Component {
 	handleSubmit = (e) => {
 		e.preventDefault();
 		const { password, passwordConfirmation, } = this.state;
-		const { auth: {handleRegister, }, history, } = this.props;
+		const { auth: {handleRegister, handleUpdate, }, history, } = this.props;
 
 		if (password === passwordConfirmation)
-			handleRegister(this.state, history);
+			if (this.state.id){
+				// debugger
+				handleUpdate(this.state, history);
+			}else{
+				// debugger
+				handleRegister(this.state, history);
+			}
 		else
 			alert("Passwords Don't Match!");
 
@@ -25,10 +39,11 @@ class Register extends React.Component {
 	
 	render() {
 		const { email, password, passwordConfirmation, name, nickname, } = this.state;
+		const { auth: { user, }} = this.props;
 
 		return(
 			<Segment basic >
-				<Header as='h1' textAlign='center' >Register</Header>	
+				<Header as='h1' textAlign='center' >{user ? 'Edit Account' : 'Register New User' }</Header>	
 				<Form onSubmit={this.handleSubmit}>
 					<Form.Input 
 						label='Name'
@@ -54,7 +69,7 @@ class Register extends React.Component {
 						onChange={this.handleChange}
 					/>
 					<Form.Input 
-						label='Password'
+						label={user ? 'Old Password' : 'Password'}
 						type='password'
 						required
 						name='password'
@@ -63,7 +78,7 @@ class Register extends React.Component {
 						onChange={this.handleChange}
 					/>
 					<Form.Input 
-						label='Password Confirmation'
+						label={user ? 'Old Password Confirmation' : 'Password Confirmation'}
 						type='password'
 						required
 						name='passwordConfirmation'
@@ -81,9 +96,9 @@ class Register extends React.Component {
 const ConnectedRegister = (props) => (
 	<AuthConsumer>
 		{ auth => (
-			<Register 
-				{ ...props } 
-				auth={ auth } 
+			<Register
+				{ ...props }
+				auth={ auth }
 			/>
 		)}
 	</AuthConsumer>

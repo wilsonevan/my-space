@@ -10,7 +10,7 @@ export class AuthProvider extends React.Component {
 	handleRegister = (user, history, ) => {
 		axios.post('/api/auth', user, )
 			.then( res => {
-				this.setState({ user: res.data, });
+				this.setState({ user: res.data.data, });
 				history.push('/');
 			})
 			.catch( res => {
@@ -27,7 +27,15 @@ export class AuthProvider extends React.Component {
       .catch( res => {
         console.log(res);
       })
-  }
+	}
+	
+	handleUpdate = (user, history) => {
+		axios.put('/api/auth', user)
+			.then( res => {
+				this.setState({ user: res.data.data, });
+				history.push("/");
+			})
+	}
 	
 
   handleLogout = (history) => {
@@ -47,6 +55,7 @@ export class AuthProvider extends React.Component {
 				...this.state,
 				authenticated: this.state.user !== null,
 				handleRegister: this.handleRegister,
+				handleUpdate: this.handleUpdate,
 				handleLogin: this.handleLogin,
 				handleLogout: this.handleLogout,
 				setUser: (user) => this.setState({ user, }),

@@ -11,9 +11,11 @@ class Navbar extends React.Component {
 		if (user) {
 			return(
 				<Menu.Menu position='right'>
-					<Menu.Item>
-						{ user.email }
-					</Menu.Item>
+					<NavLink to='/edituser'>
+						<Menu.Item>
+							{ user.email }
+						</Menu.Item>
+					</NavLink>
 					<Menu.Item onClick={() => handleLogout( history )}>
 						Logout
 					</Menu.Item>

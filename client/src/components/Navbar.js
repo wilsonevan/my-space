@@ -39,7 +39,7 @@ class Navbar extends React.Component {
 
 	render() {
 		return(
-			<Menu borderless >
+			<Menu inverted color='orange' borderless >
 				<NavLink to='/'>
 					<Menu.Item>
 						Home

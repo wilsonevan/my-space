@@ -1,25 +1,84 @@
 import React from 'react';
 import axios from 'axios';
-import { Header, Feed, Icon,  } from 'semantic-ui-react';
+// import PostView from './PostView';
+import PostForm from './PostForm';
+import { Header, Feed, Icon, Segment,  } from 'semantic-ui-react';
 
 class Home extends React.Component {
   state = { posts: [], users: [] }
 
-  componentDidMount() {
+  getPosts = () => {
     axios.get('/api/v1/posts')
-      .then( res => {
-        this.setState({ posts: res.data, })
-      })
+    .then( res => {
+      let sortedPosts = res.data
+      // debugger
+      function compare(a,b) {
+        // debugger
+        if (a.created_at < b.created_at)
+          return 1;
+        if (a.created_at > b.created_at)
+          return -1;
+        return 0;
+      }
+      
+      sortedPosts = sortedPosts.sort(compare);
+
+      this.setState( {posts: sortedPosts, users: this.state.users, }, )
+
+    })
+
   }
 
-  // showPosts() {
-  //   return(
-     
-  //   )
-  // }
+  getUsers = () => {
+    // debugger
+    axios.get('/api/v1/users')
+    .then( res => {
+      // debugger
+      this.setState( {posts: this.state.posts, users: res.data, }, )
+    })
+  }
+
+
+  componentDidMount() {
+    // let currentPosts = this.state.posts
+    // let currentUsers = this.state.users
+    
+    this.getPosts()
+    this.getUsers()
+  }
+
+  fetchUserName = (userId) => {
+    const userName = this.state.users.filter( user => user.id == userId );
+    // debugger
+    if (userName.length)
+      return userName[0].nickname;
+    else
+      return "";
+  }
+
+  formatDate = (date) => {
+    let d = new Date(date)
+    // debugger
+    return d.toLocaleString()
+  }
+
+  updateState = (post) => {
+    // debugger
+    let currentPosts = this.state.posts
+    currentPosts.unshift(post)
+    // console.log({ posts: currentPosts, users: this.state.users, })
+    this.setState({ posts: currentPosts, users: this.state.users, })
+  }
 
   render() {
     return(
+      <>
+      <Header as='h5' attached='top'>
+        Create Post
+      </Header>
+      <Segment attached>
+          <PostForm updateState={this.updateState}/>
+      </Segment>
       <Feed>
         {this.state.posts.map( (post) => (
           <Feed.Event>
@@ -28,8 +87,8 @@ class Home extends React.Component {
             </Feed.Label>
             <Feed.Content>
               <Feed.Summary>
-                {/* <Feed.User>{post.title}</Feed.User> */}
-                <Feed.Date>{post.created_at}</Feed.Date>
+                <Feed.User>{this.fetchUserName(post.id)}</Feed.User>
+                <Feed.Date>{this.formatDate(post.created_at)}</Feed.Date>
               </Feed.Summary>
               <Feed.Extra text>
                 {post.content}
@@ -45,6 +104,7 @@ class Home extends React.Component {
           ))
         }
       </Feed>
+      </>
     )
   }
 }

@@ -6,6 +6,9 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :posts
       resources :users, only: [:index, :show]
+
+      get 'my_friends', to: 'users#my_friends'
+      post 'add_friend', to: 'users#add_friend'
     end
   end
 

@@ -13,7 +13,7 @@ class Navbar extends React.Component {
 				<Menu.Menu position='right'>
 					<NavLink to='/edituser'>
 						<Menu.Item>
-							{ user.email }
+							Hi, {user.name ? user.name : user.email }
 						</Menu.Item>
 					</NavLink>
 					<Menu.Item onClick={() => handleLogout( history )}>
@@ -45,6 +45,11 @@ class Navbar extends React.Component {
 				<NavLink to='/'>
 					<Menu.Item>
 						Home
+					</Menu.Item>
+				</NavLink>
+				<NavLink to='/find'>
+					<Menu.Item>
+						Find Friends
 					</Menu.Item>
 				</NavLink>
 				{this.rightNavItems()}

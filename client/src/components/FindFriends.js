@@ -48,26 +48,20 @@ class FindFriends extends React.Component {
   }
 
   addFriend = (friendId) => {
-    // TODO only add if not already in list
-    // TODO remove from friendslist if already in it
     
-    const { auth: { handleUpdate, user }, history, } = this.props;
+    const { auth: { user, }, } = this.props;
 
     // Already in the list, so REMOVE from list
     if ( this.isFriend(friendId) ) {
-      // debugger
       axios.post('/api/v1/remove_friend', { ...user, friendId: friendId, } )
         .then( res => {
-          // debugger
           this.setState({ users: this.state.users, friends: res.data.friends_list, user: this.state.user, })
         })
     } 
     
     else { // Not in friend list, so ADD to list
-      // debugger
       axios.post('/api/v1/add_friend', { ...user, friendId: friendId, } )
         .then( res => {
-          // debugger
           this.setState({ users: this.state.users, friends: res.data.friends_list, user: this.state.user, })
         })
     }

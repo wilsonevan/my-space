@@ -6,57 +6,71 @@ import { NavLink, } from 'react-router-dom'
 import { Header, Icon, Item,  } from 'semantic-ui-react';
 
 class FindFriends extends React.Component {
-  state = { users: [], friends: [], }
+  state = { users: [], friends: [], user: {} }
 
   getUsers = () => {
     axios.get('/api/v1/users')
     .then( res => {
-      this.setState( {users: res.data, friends: this.state.friends, }, )
+      this.setState( {users: res.data, friends: this.state.friends, user: this.state.user, }, )
     })
   }
 
   getFriends = () => {
     // const currentUser = this.props.auth.user;
-    axios.get('/api/v1/my_friends')
-    .then( res => {
-      debugger
-      this.setState( {users: this.state.users, friends: res.data, }, )
-    })
+    // axios.get('/api/v1/my_friends')
+    // .then( res => {
+    //   this.setState( {users: this.state.users, friends: res.data, user: this.state.user, }, )
+    // })
+
+    // const { auth: { user }, } = this.props;
+    // this.setState({user})
+
   }
 
   componentDidMount() {
 
-    this.getUsers()
-    this.getFriends()
-    // let currentPosts = this.state.posts
-    // let currentUsers = this.state.users
+    // Set the User from AUTH
+    this.setState({user: this.props.auth.user, users: this.state.users, friends: this.props.auth.user.friends_list, } )
 
+    // Get friend data
+    this.getUsers()
+    // this.getFriends()
   }
 
   isFriend = (userId) => {
-    // TODO Loop through and check whether userId is in the current user's friends list
-    const friend = this.state.friends.filter( friend => friend.id == userId );
-    // debugger
+    const friend = this.state.friends.filter( friend => friend == userId );
+    console.log(friend)
+
     if (friend.length)
       return true;
     else
       return false;
-    // If it is, return true
-    // Else, return false
-    // return false
   }
 
   addFriend = (friendId) => {
-    // debugger
-    // TODO add to user's friendslist
-
-    const currentUser = this.props.auth.user;
+    // TODO only add if not already in list
+    // TODO remove from friendslist if already in it
     
-    axios.post('/api/v1/add_friend', { ...currentUser, friendId: friendId, } )
-    .then( res => {
-        debugger
-        this.setState({ users: this.state.users, friends: res.data, })
-      })
+    const { auth: { handleUpdate, user }, history, } = this.props;
+
+    // Already in the list, so REMOVE from list
+    if ( this.isFriend(friendId) ) {
+      // debugger
+      axios.post('/api/v1/remove_friend', { ...user, friendId: friendId, } )
+        .then( res => {
+          // debugger
+          this.setState({ users: this.state.users, friends: res.data.friends_list, user: this.state.user, })
+        })
+    } 
+    
+    else { // Not in friend list, so ADD to list
+      // debugger
+      axios.post('/api/v1/add_friend', { ...user, friendId: friendId, } )
+        .then( res => {
+          // debugger
+          this.setState({ users: this.state.users, friends: res.data.friends_list, user: this.state.user, })
+        })
+    }
   }
 
   render() {

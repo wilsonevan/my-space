@@ -1,6 +1,6 @@
 class Api::V1::UsersController < ApplicationController
 	# before_action :authenticate_user!
-  before_action :set_user, only: [:show, :add_friend,]
+  before_action :set_user, only: [:show, :add_friend, :remove_friend]
 
   def index
     render json: User.all
@@ -10,23 +10,38 @@ class Api::V1::UsersController < ApplicationController
     render json: @user
   end
 
-  def update
+  # def update
 
-  end
+  # end
 
-  def my_friends
-    # binding.pry
-    render json: current_user.friends_list
-  end
+  # def my_friends
+  #   # binding.pry
+  #   render json: current_user.friends_list
+  # end
 
   def add_friend
 
-    @user.friends_list.push(define_friend)
-    binding.pry
-    if @user.update(user_params)
-      render json: @user
+    current_user.friends_list.push(define_friend)
+    # binding.pry
+    if current_user.save
+      render json: current_user 
     else
       render json: @user.errors, status: 422
+    end
+
+  end
+
+  def remove_friend
+
+    new_list = current_user.friends_list.delete_if{|friend| friend == define_friend }
+    # binding.pry
+      
+    current_user.friends_list = new_list
+    # binding.pry
+    if current_user.save
+      render json: current_user 
+    else
+      render json: current_user.errors, status: 422
     end
 
   end
@@ -61,7 +76,7 @@ class Api::V1::UsersController < ApplicationController
 
     def define_friend
       # binding.pry
-      params[:friendId]
+      params[:friendId].to_s
     end
 
     def user_params

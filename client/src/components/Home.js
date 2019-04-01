@@ -11,9 +11,7 @@ class Home extends React.Component {
     axios.get('/api/v1/posts')
     .then( res => {
       let sortedPosts = res.data
-      // debugger
       function compare(a,b) {
-        // debugger
         if (a.created_at < b.created_at)
           return 1;
         if (a.created_at > b.created_at)
@@ -30,26 +28,20 @@ class Home extends React.Component {
   }
 
   getUsers = () => {
-    // debugger
     axios.get('/api/v1/users')
     .then( res => {
-      // debugger
       this.setState( {posts: this.state.posts, users: res.data, }, )
     })
   }
 
 
   componentDidMount() {
-    // let currentPosts = this.state.posts
-    // let currentUsers = this.state.users
-    
     this.getPosts()
     this.getUsers()
   }
 
   fetchUserName = (userId) => {
     const userName = this.state.users.filter( user => user.id == userId );
-    // debugger
     if (userName.length)
       return userName[0].nickname;
     else
@@ -58,15 +50,12 @@ class Home extends React.Component {
 
   formatDate = (date) => {
     let d = new Date(date)
-    // debugger
     return d.toLocaleString()
   }
 
   updateState = (post) => {
-    // debugger
     let currentPosts = this.state.posts
     currentPosts.unshift(post)
-    // console.log({ posts: currentPosts, users: this.state.users, })
     this.setState({ posts: currentPosts, users: this.state.users, })
   }
 

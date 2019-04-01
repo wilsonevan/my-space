@@ -30,13 +30,14 @@ export class AuthProvider extends React.Component {
 	}
 	
 	handleUpdate = (user, history) => {
-		debugger
 		axios.put('/api/auth', user)
 			.then( res => {
-				debugger
 				this.setState({ user: res.data.data, });
 				history.push("/");
 			})
+			.catch( res => {
+        console.log(res);
+      })
 	}
 	
   handleLogout = (history) => {

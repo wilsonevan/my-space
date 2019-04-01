@@ -14,11 +14,9 @@ class PostForm extends React.Component {
 	handleSubmit = (e) => {
 		e.preventDefault();
 		const id = this.props.auth.user.id;
-		// debugger
 		const post = { ...this.state, user_id: id, };
 		axios.post('/api/v1/posts', post )
 			.then( res => {
-				// debugger
 				this.props.updateState( res.data )
 				this.setState( { content: '', } )
 			})

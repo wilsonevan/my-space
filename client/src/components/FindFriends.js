@@ -15,31 +15,17 @@ class FindFriends extends React.Component {
     })
   }
 
-  getFriends = () => {
-    // const currentUser = this.props.auth.user;
-    // axios.get('/api/v1/my_friends')
-    // .then( res => {
-    //   this.setState( {users: this.state.users, friends: res.data, user: this.state.user, }, )
-    // })
-
-    // const { auth: { user }, } = this.props;
-    // this.setState({user})
-
-  }
-
   componentDidMount() {
 
-    // Set the User from AUTH
+    // Set the User and their friends list from Auth
     this.setState({user: this.props.auth.user, users: this.state.users, friends: this.props.auth.user.friends_list, } )
 
     // Get friend data
     this.getUsers()
-    // this.getFriends()
   }
 
   isFriend = (userId) => {
     const friend = this.state.friends.filter( friend => friend == userId );
-    console.log(friend)
 
     if (friend.length)
       return true;

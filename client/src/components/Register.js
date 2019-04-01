@@ -1,7 +1,7 @@
 import React from 'react';
 import { AuthConsumer, } from '../providers/AuthProvider';
 
-import { Header, Form, Button, Segment, } from 'semantic-ui-react';
+import { Header, Form, Button, Segment, Select, } from 'semantic-ui-react';
 
 
 class Register extends React.Component {
@@ -26,10 +26,8 @@ class Register extends React.Component {
 
 		if (password === passwordConfirmation)
 			if (this.state.id){
-				// debugger
 				handleUpdate(this.state, history);
 			}else{
-				// debugger
 				handleRegister(this.state, history);
 			}
 		else
@@ -86,12 +84,31 @@ class Register extends React.Component {
 						placeholder='Password Confirmation'
 						onChange={this.handleChange}
 					/>
+					<Form.Field 
+						control={Select}
+						label='Avatar'
+						options={options}
+						placeholder='Avatars' 
+					/>
 					<Form.Button primary type='submit'>Submit</Form.Button>
 				</Form>
 			</Segment>
 		)
 	}
 }
+
+const options = [
+	{ key: '1', text: '1', value: '<img src="http://lorempixel.com/400/300/people/1/"/>' },
+	{ key: '2', text: '2', value: '<img src="http://lorempixel.com/400/300/people/2/"/>' },
+	{ key: '3', text: '3', value: '<img src="http://lorempixel.com/400/300/people/3/"/>' },
+	{ key: '4', text: '4', value: '<img src="http://lorempixel.com/400/300/people/4/"/>' },
+	{ key: '5', text: '5', value: '<img src="http://lorempixel.com/400/300/people/5/"/>' },
+	{ key: '6', text: '6', value: '<img src="http://lorempixel.com/400/300/people/6/"/>' },
+	{ key: '7', text: '7', value: '<img src="http://lorempixel.com/400/300/people/7/"/>' },
+	{ key: '8', text: '8', value: '<img src="http://lorempixel.com/400/300/people/8/"/>' },
+	{ key: '9', text: '9', value: '<img src="http://lorempixel.com/400/300/people/9/"/>' },
+	{ key: '10', text: '10', value: '<img src="http://lorempixel.com/400/300/people/10/"/>' },
+]
 
 const ConnectedRegister = (props) => (
 	<AuthConsumer>
